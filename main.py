@@ -69,3 +69,23 @@ class Graph:
 
     def reset_graph(self, x):
         self.__init__(x)
+
+    def DFS(self, start, visited):
+        visited[start] = True
+        for i in range(self.__n):
+            if self.__g[start][i] == 1 and (not visited[i]):
+                self.DFS(i, visited)
+
+    def DFS_show(self, start, visited):
+        check = 0
+        visited[start] = True
+        for i in range(self.__n):
+            if visited[i] == True:
+                check += 1
+        if check == 5:
+            print(self.__A[start])
+        else:
+            print(self.__A[start], "->", end=' ')
+        for i in range(self.__n):
+            if self.__g[start][i] == 1 and (not visited[i]):
+                self.DFS_show(i, visited)
