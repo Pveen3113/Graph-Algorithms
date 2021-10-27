@@ -3,9 +3,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-
-
-
 def Strongly_connected(obj):
     v = 5
     j = 0
@@ -16,10 +13,8 @@ def Strongly_connected(obj):
         if any(i is False for i in visited):
             strong[i] = False
         j += 1
-
     if any(i is False for i in strong):
         return False
-
     else:
         return True
 
@@ -34,10 +29,8 @@ def disp_Strongly_connected(obj):
             strong[i] = False
         j += 1
         print()
-
     if any(i is False for i in strong):
         return False
-
     else:
         return True
 
