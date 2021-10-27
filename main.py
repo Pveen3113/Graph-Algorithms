@@ -190,3 +190,104 @@ class Graph:
             if cycle[p] != -1:
                 print(map_list[cycle[p]])
                 break
+    def func3(self, source, target):
+        # Dictionary of all weighted edges to all vertices
+        cost = [[0, 351, 2853, 756, 6886],
+                [351, 0, 2955, 776, 7128],
+                [2853, 2955, 0, 2180, 4532],
+                [756, 776, 2180, 0, 6446],
+                [6886, 7128, 4532, 6446, 0]]
+        # Create weighted matrix based on the graph
+        for i in range(0, 5):
+            for j in range(0, 5):
+                if self.__g[i][j] == 1:
+                    self.__Cost[i][j] = cost[i][j]
+                else:
+                    self.__Cost[i][j] = 0
+
+        # Create an array of 5 elements with max integer value
+        dis = [sys.maxsize] * self.__n
+        # Create an array of 5 elements with -1 value
+        parent = [-1] * self.__n
+        # Make distance of source value to zero
+        dis[source] = 0
+        # Create an array of 5 elements with false boolean
+        sptSet = [False] * self.__n
+
+        k = 0
+        while k < self.__n:
+            # u always equals source in first iteration
+            # Choose the shortest distance from the set is dist
+            u = self.minDistance(dis, sptSet)
+            # After u is chosen sptSet of u's index becomes true so that
+            # it won't be chosen again in next iteration
+            sptSet[u] = True
+            for v in range(self.__n):
+                if self.__Cost[u][v] > 0 and sptSet[v] == False and dis[v] > dis[u] + self.__Cost[u][v]:
+                    dis[v] = dis[u] + self.__Cost[u][v]
+                    parent[v] = u
+            # After dijkstra algorithm finish finding all possible path
+            # and still no path found to target vertex, random edges at random
+            # vertices created until path exist to target vertex
+            if k == 4 and dis[target] == sys.maxsize:
+                k = -1
+ #               obj.random_edge()
+                cost = [[0, 351, 2853, 756, 6886],
+                        [351, 0, 2955, 776, 7128],
+                        [2853, 2955, 0, 2180, 4532],
+                        [756, 776, 2180, 0, 6446],
+                        [6886, 7128, 4532, 6446, 0]]
+
+                for i in range(0, 5):
+                    for j in range(0, 5):
+                        if self.__g[i][j] == 1:
+                            self.__Cost[i][j] = cost[i][j]
+                        else:
+                            self.__Cost[i][j] = 0
+
+                dis = [sys.maxsize] * self.__n
+                parent = [-1] * self.__n
+                dis[source] = 0
+                sptSet = [False] * self.__n
+            k += 1
+        # Prints weighted edges matrix with available edges
+        print("\nWeighted Adjacency Matrix")
+        for i in range(0, self.__n):
+            print()
+            for j in range(0, self.__n):
+                print("", self.__Cost[i][j], end="")
+        print()
+
+        self.printSolution(dis, parent, source, target)
+        self.drawgraph()
+
+    def printPath(self, parent, j):
+        # Prints the shortest path
+        # Base Case : If j is source
+        if parent[j] == -1:
+            print("\t\t\t", self.__A[j], end=" "),
+            return
+        self.printPath(parent, parent[j])
+        print("-->", self.__A[j], end=" "),
+
+    def printSolution(self, dist, parent, source, target):
+        # Prints the total distance taken
+        print("\nTarget \t\tDistance from Source \t\tPath")
+        print(self.__A[source], "-->", self.__A[target], "\t\t\t", dist[target], end=" "), self.printPath(parent,
+                                                                                                          target)
+        print()
+
+    def minDistance(self, dist, sptSet):
+        min = sys.maxsize
+        min_index = -1
+        for v in range(self.__n):
+            if dist[v] < min and sptSet[v] == False:
+                min = dist[v]
+                min_index = v
+        # If no smaller vertices found, then it assigns to other vertices
+        # that have false in the sptSet array.
+        if min_index == -1:
+            for v in range(self.__n):
+                if sptSet[v] == False:
+                    min_index = v
+        return min_index
