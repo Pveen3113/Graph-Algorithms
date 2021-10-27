@@ -3,6 +3,45 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
+def Strongly_connected(obj):
+    v = 5
+    j = 0
+    strong = [True] * v
+    for i in range(v):
+        visited = [False] * v
+        obj.DFS(j, visited)
+        if any(i is False for i in visited):
+            strong[i] = False
+        j += 1
+
+    if any(i is False for i in strong):
+        return False
+
+    else:
+        return True
+
+def disp_Strongly_connected(obj):
+    v = 5
+    j = 0
+    strong = [True] * v
+    for i in range(v):
+        visited = [False] * v
+        obj.DFS_show(j, visited)
+        if any(i is False for i in visited):
+            strong[i] = False
+        j += 1
+        print()
+
+    if any(i is False for i in strong):
+        return False
+
+    else:
+        return True
+
+def create_strongly_connected(obj):
+    while not Strongly_connected(obj):
+        obj.random_edge()
+
 class Graph:
     __A = ['Ed', 'Du', 'Is', 'Br', 'Jp']
     __n = 0
