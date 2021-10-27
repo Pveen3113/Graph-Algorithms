@@ -3,6 +3,9 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
+
+
+
 def Strongly_connected(obj):
     v = 5
     j = 0
@@ -128,3 +131,62 @@ class Graph:
         for i in range(self.__n):
             if self.__g[start][i] == 1 and (not visited[i]):
                 self.DFS_show(i, visited)
+
+    def random_edge(self):
+        a = random.randint(0, 4)
+        b = random.randint(0, 4)
+        while a == b and b == a:
+            a = random.randint(0, 4)
+            b = random.randint(0, 4)
+ #       obj.addEdge(a, b)
+
+    def cycle_det(self, start_vertex, visited, pred, lc, local_pos, pred_local):
+        label_count = lc
+        visited[start_vertex] = label_count
+        if label_count == 1:
+            pred[start_vertex] = -10
+            pred_local[start_vertex] = local_pos
+        for i in range(self.__n):
+            # 1 [to see if there is an edge or not] && 0 [indicates tht it is not visited]
+            if Graph.__g[start_vertex][i] == 1 and (visited[i] == 0):
+                local_pos = local_pos + 1
+                pred[i] = start_vertex
+                pred_local[i] = local_pos
+                label_count = label_count + 1
+                visited[i] = label_count
+                self.cycle_det(i, visited, pred, label_count, local_pos, pred_local)
+            elif Graph.__g[start_vertex][i] == 1 and (visited[i] != -1):  # check this != condition over here
+                print("\nCycle detected :")
+                self.hascycle = True
+                self.print_cycle(visited, i)
+        visited[start_vertex] = -1  # labelled as -1 when it is no longer considered, when you have backtracked
+
+    def print_cycle(self, visited, i):
+        map_list = ['Ed', 'Du', 'Is', 'Br', 'Jp']
+        count = [False] * self.__n
+        cycle = [-1] * self.__n
+        reach = 0
+        max = 0
+        num = 0
+        for m in range(self.__n):
+            for j in range(self.__n):
+                if visited[j] >= max and count[j] == False:
+                    max = visited[j]
+                    num = j
+            if num == i:
+                reach = 1
+            count[num] = True
+            for k in range(self.__n):
+                if cycle[k] == -1:
+                    cycle[k] = num
+                    break
+            max = -1
+            if reach == 1:
+                break
+        for p in range(4, -1, -1):
+            if cycle[p] != -1:
+                print(map_list[cycle[p]], "-->", end=" ")
+        for p in range(4, -1, -1):
+            if cycle[p] != -1:
+                print(map_list[cycle[p]])
+                break
