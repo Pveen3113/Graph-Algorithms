@@ -138,7 +138,7 @@ class Graph:
         while a == b and b == a:
             a = random.randint(0, 4)
             b = random.randint(0, 4)
- #       obj.addEdge(a, b)
+        obj.addEdge(a, b)
 
     def cycle_det(self, start_vertex, visited, pred, lc, local_pos, pred_local):
         label_count = lc
@@ -231,7 +231,7 @@ class Graph:
             # vertices created until path exist to target vertex
             if k == 4 and dis[target] == sys.maxsize:
                 k = -1
- #               obj.random_edge()
+                obj.random_edge()
                 cost = [[0, 351, 2853, 756, 6886],
                         [351, 0, 2955, 776, 7128],
                         [2853, 2955, 0, 2180, 4532],
@@ -291,3 +291,135 @@ class Graph:
                 if sptSet[v] == False:
                     min_index = v
         return min_index
+
+
+def menu():
+    print("###########     MENU       ###########")
+    print(">>> Select an option from below <<<")
+    print("      1) Add An Edge ")
+    print("      2) Remove An Edge ")
+    print("      3) Display the graph")
+    print("      4) Display the adjaceny matrix")
+    print("      5) Strongly connected Graph")
+    print("      6) Cycle detection")
+    print("      7) Shortest Path")
+    print("      8) Reset the graph")
+    print("      9) Exit Program")
+
+
+def map_menu():
+    print("\nRefer to this table to key in the number")
+    print("       1) Edinburgh    4) Brussels")
+    print("       2) Dublin       5) Jaipur")
+    print("       3) Istanbul")
+
+
+v = 5  # v is the number of vertex
+obj = Graph(v)
+print("\n ## The Default graph is printed out! ## \n")
+obj.drawgraph()
+
+while True:
+    menu()
+    val = int(input("Your option : "))
+    while val > 10 or val < 1:
+        print("Incorrect choosing. Please choose again")
+        val = int(input())
+
+    if val == 1:
+        print(">> Add a new edge <<")
+        print("\nAdd a directed edge based on the format below ")
+        print("          'Vertex A' to 'Vertex B'")
+        map_menu()
+        dari = int(input("Vertex A : ")) - 1
+        ke = int(input("Vertex B : ")) - 1
+        while (dari > 5 or dari < 1) and (ke > 5 or ke < 1):
+            print("Incorrect choosing. Please choose again")
+            dari = int(input("Vertex A : "))
+            ke = int(input("Vertex B : "))
+        obj.addEdge(dari, ke)
+        print(">> Succesfully added the new edge !\n")
+        obj.drawgraph()
+
+    elif val == 2:
+        print(">> Remove an edge <<")
+        print("\nRemove a directed edge based on the format below ")
+        print("          'Vertex A' to 'Vertex B'")
+        map_menu()
+        dari = int(input("Vertex A : ")) - 1
+        ke = int(input("Vertex B : ")) - 1
+        while (dari > 5 or dari < 1) and (ke > 5 or ke < 1):
+            print("Incorrect choosing. Please choose again")
+            dari = int(input("Vertex A : "))
+            ke = int(input("Vertex B : "))
+
+        obj.removeEdge(dari, ke)
+        print(">> Succesfully deleted the entered edge! \n ")
+        obj.drawgraph()
+
+    elif val == 3:
+        print(">> Graph is displayed << \n")
+        obj.drawgraph()
+
+    elif val == 4:
+        print(">> The adjaceny matrix is printed out << ")
+        obj.displayAdjacencyMatrix()
+        print("\n")
+
+    elif val == 5:
+        print(">> Graph connectivity << ")
+        print("Choose one of the option below: ")
+        print("1) Check if the current graph is strongly connected or not")
+        print("2) Create a strongly connected graph")
+        choice = int(input("Your option: "))
+        if (choice == 1):
+            if Strongly_connected(obj):
+                print(">> YES, the graph is strongly connected\n")
+            else:
+                print(">> NO, the graph is not strongly connected\n")
+        if (choice == 2):
+            create_strongly_connected(obj)
+            obj.drawgraph()
+            print("The pathway of each vertex visiting every other vertices ")
+            disp_Strongly_connected(obj)
+
+    elif val == 6:
+        print(">> Cycle detection << ")
+        visited = [0] * v
+        pred = [999] * v
+        pred_local = [-7] * v
+        lc = 1
+        local_pos = 1
+        for xii in range(5):
+            obj.cycle_det(xii, visited, pred, lc, local_pos, pred_local)
+            if (obj.hascycle == False):
+                print("No cycle detected, random edges will be added now!")
+                print(">>> After adding in random edges : ")
+            while (obj.hascycle == False):
+                obj.random_edge()
+                obj.cycle_det(xii, visited, pred, lc, local_pos, pred_local)
+        print("\n")
+        obj.drawgraph()
+
+    elif val == 7:
+        print(">> Shortest path << ")
+        print("\nChoose the vertices based on the format below ")
+        print("          'Vertex A' to 'Vertex B'")
+        map_menu()
+        start = int(input("Vertex A : ")) - 1
+        end = int(input("Vertex B : ")) - 1
+        while (start > 5 or start < 1) and (end > 5 or end < 1):
+            print("Incorrect choosing. Please choose again")
+            start = int(input()) - 1
+            end = int(input()) - 1
+        obj.func3(start, end)
+        print("\n")
+
+    elif val == 8:
+        print(">> The graph is RESET back to the default graph \n")
+        obj.reset_graph(5)
+        obj.drawgraph()
+
+    elif val == 9:
+        print("Thank you for using our app")
+        sys.exit()
